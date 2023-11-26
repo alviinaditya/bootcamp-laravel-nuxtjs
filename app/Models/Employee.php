@@ -30,6 +30,6 @@ class Employee extends Model
 
     public function role()
     {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsTo(Role::class);
     }
 }
