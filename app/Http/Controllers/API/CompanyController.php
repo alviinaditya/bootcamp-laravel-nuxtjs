@@ -34,6 +34,9 @@ class CompanyController extends Controller
 
         if ($name) {
             $companies->where('name', 'like', '%' . $name . '%');
+            if ($companies->count() === 0) {
+                return ResponseFormatter::error('Company Not Found!', 404);
+            }
         }
 
         return ResponseFormatter::success(
