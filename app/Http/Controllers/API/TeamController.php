@@ -7,9 +7,7 @@ use App\Models\Team;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseFormatter;
 use App\Http\Requests\TeamRequest;
-use App\Models\User;
 use Exception;
-use Illuminate\Support\Facades\Auth;
 
 class TeamController extends Controller
 {
@@ -30,7 +28,7 @@ class TeamController extends Controller
         $teams = $teamQuery->where('company_id', $request->company_id);
 
         if ($name) {
-            $teams = $teams->where('name', 'like', '%' . $name . '%');
+            $teams->where('name', 'like', '%' . $name . '%');
             if ($teams->count() === 0) {
                 return ResponseFormatter::error('Team Not Found!', 404);
             }
@@ -70,7 +68,7 @@ class TeamController extends Controller
     {
         try {
             // Get Company
-            $team = team::find($id);
+            $team = Team::find($id);
 
             // Check if team exist
             if (!$team) {
