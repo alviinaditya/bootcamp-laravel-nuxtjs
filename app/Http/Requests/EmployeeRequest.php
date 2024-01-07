@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class EmployeeRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class EmployeeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return Auth::check();
     }
 
     /**
@@ -22,7 +23,14 @@ class EmployeeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'gender' => 'required|string|in:MALE,FEMALE',
+            'age' => 'required|integer',
+            'phone' => 'required|string|max:255',
+            'photo' => 'nullable|image|mimes:png,jpg,jpeg,gif,svg|max:255',
+            'team_id' => 'required|integer|exists:teams,id',
+            'role_id' => 'required|integer|exists:roles,id',
         ];
     }
 }
