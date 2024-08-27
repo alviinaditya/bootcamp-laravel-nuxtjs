@@ -21,6 +21,7 @@ class EmployeeController extends Controller
         $phone = $request->input('phone');
         $team_id = $request->input('team_id');
         $role_id = $request->input('role_id');
+        $company_id = $request->input('company_id');
         $limit = $request->input('limit', 10);
 
         $employeeQuery = Employee::query();
@@ -80,6 +81,15 @@ class EmployeeController extends Controller
 
         if ($role_id) {
             $employees->where('role_id', $role_id);
+            if ($employees->count() === 0) {
+                return ResponseFormatter::error('Employee Not Found!', 404);
+            }
+        }
+
+        if ($company_id) {
+            $employees->whereHas('team', function ($q) use ($company_id) {
+                $q->where('company_id', $company_id);
+            });
             if ($employees->count() === 0) {
                 return ResponseFormatter::error('Employee Not Found!', 404);
             }
