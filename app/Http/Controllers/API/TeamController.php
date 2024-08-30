@@ -16,7 +16,7 @@ class TeamController extends Controller
         $id = $request->input('id');
         $name = $request->input('name');
         $limit = $request->input('limit', 10);
-        $teamQuery = Team::query();
+        $teamQuery = Team::withCount('employees');
         if ($id) {
             $team = $teamQuery->find($id);
             if ($team) {
@@ -50,8 +50,9 @@ class TeamController extends Controller
             // Create Team
             $team = Team::create([
                 'name' => $request->name,
-                'icon' => $path,
+                'icon' => isset($path) ? $path : '',
                 'company_id' => $request->company_id,
+                'status' => $request->status,
             ]);
 
             if (!$team) {
@@ -85,6 +86,7 @@ class TeamController extends Controller
                 'name' => $request->name,
                 'icon' => isset($path) ? $path : $team->icon,
                 'company_id' => $request->company_id,
+                'status' => $request->status,
             ]);
 
             return ResponseFormatter::success($team, 'Team Updated');

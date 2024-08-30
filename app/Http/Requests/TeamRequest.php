@@ -25,7 +25,8 @@ class TeamRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'icon' => 'nullable|image|mimes:png,jpg,jpeg,gif,svg|max:2848',
-            'company_id' => 'required|integer|exists:companies,id'
+            'company_id' => 'required|integer|exists:companies,id',
+            'status' => 'required|boolean'
         ];
     }
 }

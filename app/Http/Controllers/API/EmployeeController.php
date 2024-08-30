@@ -24,10 +24,10 @@ class EmployeeController extends Controller
         $company_id = $request->input('company_id');
         $limit = $request->input('limit', 10);
 
-        $employeeQuery = Employee::query();
+        $employeeQuery = Employee::with(['team', 'role']);
 
         if ($id) {
-            $employee = $employeeQuery->with(['team', 'role'])->find($id);
+            $employee = $employeeQuery->find($id);
             if ($employee) {
                 return ResponseFormatter::success($employee, 'Employee Found!');
             }
@@ -115,7 +115,7 @@ class EmployeeController extends Controller
                 'gender' => $request->gender,
                 'age' => $request->age,
                 'phone' => $request->phone,
-                'photo' => $path,
+                'photo' => isset($path) ? $path : '',
                 'team_id' => $request->team_id,
                 'role_id' => $request->role_id,
             ]);
@@ -159,6 +159,25 @@ class EmployeeController extends Controller
             ]);
 
             return ResponseFormatter::success($employee, 'Employee Updated');
+        } catch (Exception $e) {
+            return ResponseFormatter::error($e->getMessage(), 500);
+        }
+    }
+
+    public function verify($id) {
+        try {
+            $employee = Employee::find($id);
+
+            if (!$employee) {
+                return ResponseFormatter::error('employee not Found', 404);
+            }
+
+            $employee->update([
+                'is_verified' => true,
+                'verified_at' => now()
+            ]);
+
+            return ResponseFormatter::success($employee, 'Employee Verified');
         } catch (Exception $e) {
             return ResponseFormatter::error($e->getMessage(), 500);
         }

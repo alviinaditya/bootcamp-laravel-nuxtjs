@@ -49,6 +49,7 @@ Route::prefix('employee')->middleware('auth:sanctum')->name('employee.')->group(
     Route::get('', [EmployeeController::class, 'fetch'])->name('fetch');
     Route::post('', [EmployeeController::class, 'create'])->name('create');
     Route::post('update/{id}', [EmployeeController::class, 'update'])->name('update');
+    Route::post('verify/{id}', [EmployeeController::class, 'verify'])->name('verify');
     Route::delete('{id}', [EmployeeController::class, 'destroy'])->name('delete');
 });
 
